@@ -12,7 +12,7 @@ const states = {
   A: {
     next: 'B',
     data: lathers,
-    markdown: '**Lather:** ',
+    markdown: '* **Lather:** ',
     prompt: 'Search for Lather',
     button: document.getElementById('button_A'),
     buffer: document.getElementById('buffer_A'),
@@ -21,7 +21,7 @@ const states = {
   B: {
     next: 'C',
     data: brushes,
-    markdown: '**Brush:** ',
+    markdown: '* **Brush:** ',
     prompt: 'Search for Brush',
     button: document.getElementById('button_B'),
     buffer: document.getElementById('buffer_B'),
@@ -30,7 +30,7 @@ const states = {
   C: {
     next: 'D',
     data: razors,
-    markdown: '**Razor:** ',
+    markdown: '* **Razor:** ',
     prompt: 'Search for Razor',
     button: document.getElementById('button_C'),
     buffer: document.getElementById('buffer_C'),
@@ -39,7 +39,7 @@ const states = {
   D: {
     next: 'E',
     data: blades,
-    markdown: '**Blade:** ',
+    markdown: '* **Blade:** ',
     prompt: 'Search for Blade',
     button: document.getElementById('button_D'),
     buffer: document.getElementById('buffer_D'),
@@ -48,7 +48,7 @@ const states = {
   E: {
     next: 'F',
     data: postshaves,
-    markdown: '**Post Shave:** ',
+    markdown: '* **Post Shave:** ',
     prompt: 'Search for Post Shave',
     button: document.getElementById('button_E'),
     buffer: document.getElementById('buffer_E'),
@@ -57,7 +57,7 @@ const states = {
   F: {
     next: 'A',
     data: postshaves,
-    markdown: '**Post Shave:** ',
+    markdown: '* **Post Shave:** ',
     prompt: 'Search for Moar Post Shave',
     button: document.getElementById('button_F'),
     buffer: document.getElementById('buffer_F'),
@@ -115,7 +115,7 @@ function renderSotd() {
   keys.forEach((key) => {
     var item = states[key].buffer.value.trim();
     if (item != '' ) {
-      sotd.value += states[key].markdown + item + '\n';
+      sotd.value += states[key].markdown + item + '  \n';
     }
   });
 }
