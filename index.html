@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOTD</title>
+  <link rel="stylesheet" type="text/css" href="css/index.css" >
+  <script type="module" src="node_modules/@leeoniya/ufuzzy/dist/uFuzzy.iife.js"></script>
+  <script type="module" src="js/index.js"></script>
+  <script type="module" src="js/data.js"></script>
+</head>
+<body>
+    <input id="searchbox" tabindex="0"  type="text" placeholder="Search for lather here" autofocus >
+
+    <section>
+      <button id="use_it" tabindex="-1" type="button">Use search string as is</button>
+      <button id="copy_sotd" tabindex="-1" type="button">Copy SOTD </button>
+    </section>
+
+    <form><ul id="searchresults"></ul></form>
+    <textarea id="sotd" rows="7" cols="90"> </textarea>
+
+    <section>
+      <input type="radio" id="button_A" name="select">
+      <label for="button_A"> Lather </label>
+      <input type="radio" id="button_B" name="select">
+      <label for="button_B"> Brush </label>
+      <input type="radio" id="button_C" name="select">
+      <label for="button_C"> Razor </label>
+      <input type="radio" id="button_D" name="select">
+      <label for="button_D"> Blade </label>
+      <input type="radio" id="button_E" name="select">
+      <label for="button_E"> Post Shave </label>
+      <input type="radio" id="button_F" name="select">
+      <label for="button_F"> Moar Post Shave </label>
+    </section>
+
+    <!-- non-displayed forms used as text buffers -->
+    <form> <input class="invisible" type="text" id="buffer_A" > </form>
+    <form> <input class="invisible" type="text" id="buffer_B" > </form>
+    <form> <input class="invisible" type="text" id="buffer_C" > </form>
+    <form> <input class="invisible" type="text" id="buffer_D" > </form>
+    <form> <input class="invisible" type="text" id="buffer_E" > </form>
+    <form> <input class="invisible" type="text" id="buffer_F" > </form>
+</body>
+</html>
