@@ -127,10 +127,8 @@ function enterKeyHandler(event) {
       storeSearchString();
     }
     if (count == 1) {
-    console.log('enterKeyHandler', 'C')
       storeResult(searchResults.firstChild.textContent);
     }
-    console.log('enterKeyHandler', 'exit');
   }
 }
 
