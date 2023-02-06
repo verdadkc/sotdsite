@@ -151,8 +151,10 @@ function renderSearchResults(event) {
     }
   }
   searchResults.innerHTML = '';
-  const { value, _ } = event.target;
-  search(value);
+  const { value: target, _ } = event.target;
+  if (target != ''){
+     search(target);
+  }
 }
 
 function focusChange(delta) {
