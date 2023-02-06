@@ -8,13 +8,47 @@ const searchResults = document.getElementById('searchresults');
 const sotd = document.getElementById('sotd');
 const copyButton = document.getElementById('copy_sotd');
 const useButton = document.getElementById('use_it');
-const states = {
-  A: {
-    next: 'B',
+const stateData = {
+  LATHER: {
     data: lathers,
     markdown: '* **Lather:** ',
     prompt: 'Search for Lather',
     label: 'Lather',
+  },
+  BRUSH: {
+    data: brushes,
+    markdown: '* **Brush:** ',
+    prompt: 'Search for Brush',
+    label: 'Brush',
+  },
+  RAZOR: {
+    data: razors,
+    markdown: '* **Razor:** ',
+    prompt: 'Search for Razor',
+    label: 'Razor',
+  },
+  BLADE: {
+    data: blades,
+    markdown: '* **Blade:** ',
+    prompt: 'Search for Blade',
+    label: 'Blade',
+  },
+  POST: {
+    data: postshaves,
+    markdown: '* **Post Shave:** ',
+    prompt: 'Search for Post Shave',
+    label: 'Post Shave',
+  },
+  MOAR: {
+    data: postshaves,
+    markdown: '* **Post Shave:** ',
+    prompt: 'Search for Moar Post Shave',
+    label: 'Moar Post Shave',
+  },
+};
+const stateTemplates = {
+  A: {
+    next: 'B',
     htmlLabel: document.getElementById('label_A'),
     button: document.getElementById('button_A'),
     buffer: document.getElementById('buffer_A'),
@@ -22,10 +56,6 @@ const states = {
   },
   B: {
     next: 'C',
-    data: brushes,
-    markdown: '* **Brush:** ',
-    prompt: 'Search for Brush',
-    label: 'Brush',
     htmlLabel: document.getElementById('label_B'),
     button: document.getElementById('button_B'),
     buffer: document.getElementById('buffer_B'),
@@ -33,10 +63,6 @@ const states = {
   },
   C: {
     next: 'D',
-    data: razors,
-    markdown: '* **Razor:** ',
-    prompt: 'Search for Razor',
-    label: 'Razor',
     htmlLabel: document.getElementById('label_C'),
     button: document.getElementById('button_C'),
     buffer: document.getElementById('buffer_C'),
@@ -44,10 +70,6 @@ const states = {
   },
   D: {
     next: 'E',
-    data: blades,
-    markdown: '* **Blade:** ',
-    prompt: 'Search for Blade',
-    label: 'Blade',
     htmlLabel: document.getElementById('label_D'),
     button: document.getElementById('button_D'),
     buffer: document.getElementById('buffer_D'),
@@ -55,10 +77,6 @@ const states = {
   },
   E: {
     next: 'F',
-    data: postshaves,
-    markdown: '* **Post Shave:** ',
-    prompt: 'Search for Post Shave',
-    label: 'Post Shave',
     htmlLabel: document.getElementById('label_E'),
     button: document.getElementById('button_E'),
     buffer: document.getElementById('buffer_E'),
@@ -66,16 +84,21 @@ const states = {
   },
   F: {
     next: 'A',
-    data: postshaves,
-    markdown: '* **Post Shave:** ',
-    prompt: 'Search for Moar Post Shave',
-    label: 'Moar Post Shave',
     htmlLabel: document.getElementById('label_F'),
     button: document.getElementById('button_F'),
     buffer: document.getElementById('buffer_F'),
     handler: stateChangeHandler('F'),
   },
 };
+
+const states = {
+  A: { ...stateData.RAZOR, ...stateTemplates.A },
+  B: { ...stateData.BLADE, ...stateTemplates.B },
+  C: { ...stateData.LATHER, ...stateTemplates.C },
+  D: { ...stateData.BRUSH, ...stateTemplates.D },
+  E: { ...stateData.POST, ...stateTemplates.E },
+  F: { ...stateData.MOAR, ...stateTemplates.F },
+}
 
 function stateChangeHandler(key) {
   return () => {
