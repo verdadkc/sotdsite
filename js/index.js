@@ -15,6 +15,7 @@ const states = {
     markdown: '* **Lather:** ',
     prompt: 'Search for Lather',
     label: 'Lather',
+    htmlLabel: document.getElementById('label_A'),
     button: document.getElementById('button_A'),
     buffer: document.getElementById('buffer_A'),
     handler: stateChangeHandler('A'),
@@ -25,6 +26,7 @@ const states = {
     markdown: '* **Brush:** ',
     prompt: 'Search for Brush',
     label: 'Brush',
+    htmlLabel: document.getElementById('label_B'),
     button: document.getElementById('button_B'),
     buffer: document.getElementById('buffer_B'),
     handler: stateChangeHandler('B'),
@@ -35,6 +37,7 @@ const states = {
     markdown: '* **Razor:** ',
     prompt: 'Search for Razor',
     label: 'Razor',
+    htmlLabel: document.getElementById('label_C'),
     button: document.getElementById('button_C'),
     buffer: document.getElementById('buffer_C'),
     handler: stateChangeHandler('C'),
@@ -44,7 +47,8 @@ const states = {
     data: blades,
     markdown: '* **Blade:** ',
     prompt: 'Search for Blade',
-    label: 'Razor',
+    label: 'Blade',
+    htmlLabel: document.getElementById('label_D'),
     button: document.getElementById('button_D'),
     buffer: document.getElementById('buffer_D'),
     handler: stateChangeHandler('D'),
@@ -55,6 +59,7 @@ const states = {
     markdown: '* **Post Shave:** ',
     prompt: 'Search for Post Shave',
     label: 'Post Shave',
+    htmlLabel: document.getElementById('label_E'),
     button: document.getElementById('button_E'),
     buffer: document.getElementById('buffer_E'),
     handler: stateChangeHandler('E'),
@@ -65,6 +70,7 @@ const states = {
     markdown: '* **Post Shave:** ',
     prompt: 'Search for Moar Post Shave',
     label: 'Moar Post Shave',
+    htmlLabel: document.getElementById('label_F'),
     button: document.getElementById('button_F'),
     buffer: document.getElementById('buffer_F'),
     handler: stateChangeHandler('F'),
@@ -191,15 +197,11 @@ searchResults.addEventListener('click', storeSearchResult);
 copyButton.addEventListener('click', copySotd);
 useButton.addEventListener('click', storeSearchString);
 
-// Assign each state's radio button handler
 const keys = Object.keys(states);
 keys.forEach((key) => {
   states[key].button.addEventListener('click', states[key].handler);
-});
-
-// A page reload needs to clear prior user selections (if any)
-keys.forEach((key) => {
   states[key].buffer.value = '';
+  states[key].htmlLabel.innerText = states[key].label;
 });
 sotd.value = '';
 
