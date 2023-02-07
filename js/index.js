@@ -10,7 +10,21 @@ const copyButton = document.getElementById("copy_sotd");
 const useButton = document.getElementById("use_it");
 
 
-function buildStates(word) {
+function getOrderParm(){
+  function scrub(word){
+    const validChars = ['B', 'L', 'R', 'b', 'P', 'M'];
+    return word.split('').filter((c)=>validChars.includes(c));
+  }
+  const defaultOrder = 'RbBLPM';
+  const parms = new URL(location.href).searchParams;
+  const order = parms.get('order');
+  if (order == null) return defaultOrder;
+  return scrub(order);
+}
+
+
+function buildStates() {
+  const order = getOrderParm();
   const stateData = {
     "L": {
       data: lathers,
@@ -55,55 +69,51 @@ function buildStates(word) {
       button: document.getElementById("button_A"),
       buffer: document.getElementById("buffer_A"),
       handler: stateChangeHandler(0),
-      next: 1,
     },
     {
       htmlLabel: document.getElementById("label_B"),
       button: document.getElementById("button_B"),
       buffer: document.getElementById("buffer_B"),
       handler: stateChangeHandler(1),
-      next: 2,
     },
     {
       htmlLabel: document.getElementById("label_C"),
       button: document.getElementById("button_C"),
       buffer: document.getElementById("buffer_C"),
       handler: stateChangeHandler(2),
-      next: 3,
     },
     {
       htmlLabel: document.getElementById("label_D"),
       button: document.getElementById("button_D"),
       buffer: document.getElementById("buffer_D"),
       handler: stateChangeHandler(3),
-      next: 4,
     },
     {
       htmlLabel: document.getElementById("label_E"),
       button: document.getElementById("button_E"),
       buffer: document.getElementById("buffer_E"),
       handler: stateChangeHandler(4),
-      next: 5,
     },
     {
       htmlLabel: document.getElementById("label_F"),
       button: document.getElementById("button_F"),
       buffer: document.getElementById("buffer_F"),
       handler: stateChangeHandler(5),
-      next: 0,
     },
   ];
-  const keys = word.split("");
   let result = [];
-  for (let k = 0; k < keys.length; k++) {
-    result[k] = { ...stateData[keys[k]], ...stateTemplates[k] };
+  for (let b = 0; b < stateTemplates.length; b++){
+     stateTemplates[b].htmlLabel.style.display = 'none'
+  }
+  for (let k = 0; k < order.length; k++) {
+    stateTemplates[k].htmlLabel.style.display = '';
+    stateTemplates[k].next = (k+1)%order.length;
+    result[k] = { ...stateData[order[k]], ...stateTemplates[k] };
   }
   return result;
 }
 
-//const order = "RbBLPM";
-const order = "LBRbPM";
-const states = buildStates(order);
+const states = buildStates() ;
 
 function stateChangeHandler(idx) {
   return () => {
