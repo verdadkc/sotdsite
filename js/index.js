@@ -13,12 +13,14 @@ const useButton = document.getElementById("use_it");
 function getOrderParm(){
   function scrub(word){
     const validChars = ['B', 'L', 'R', 'b', 'P', 'M'];
-    return word.split('').filter((c)=>validChars.includes(c));
+    const order = word.split('').filter((c)=>validChars.includes(c));
+    const maxLen = Math.min(6, order.length)
+    return order.slice(0,maxLen) // max of 6 categories are currently supported
   }
-  const defaultOrder = 'RbBLPM';
+  const defaultOrder = 'LBRbPM';
   const parms = new URL(location.href).searchParams;
   const order = parms.get('order');
-  if (order == null) return defaultOrder;
+  if (order == null || order == '') return defaultOrder;
   return scrub(order);
 }
 
