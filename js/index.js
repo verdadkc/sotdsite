@@ -8,7 +8,24 @@ const searchResults = document.getElementById("searchresults");
 const sotd = document.getElementById("sotd");
 const copyButton = document.getElementById("copy_sotd");
 const useButton = document.getElementById("use_it");
+const dateBuffer = document.getElementById("date_buffer");
 
+
+function getDateParm(){
+  const parms = new URL(location.href).searchParams;
+  const date = parms.get('date');
+  const today = new Date();
+  switch(date){
+    case 'D':
+      dateBuffer.value = today.toDateString();
+      break;
+    case 'd':
+      dateBuffer.value = today.toLocaleDateString();
+      break;
+    default:
+      dateBuffer.value = '';
+  }
+}
 
 function getOrderParm(){
   function scrub(word){
@@ -161,11 +178,12 @@ function storeResult(txt) {
 }
 
 function renderSotd() {
-  sotd.value = "";
+  sotd.value = '';
+  sotd.value += dateBuffer.value + '\n\n';
   const keys = Object.keys(states);
   keys.forEach((key) => {
     var item = states[key].buffer.value.trim();
-    if (item != "") {
+    if (item != '') {
       sotd.value += states[key].markdown + item + "  \n";
     }
   });
@@ -256,6 +274,7 @@ const opts = { // Search library documentation lives at github.com/leeoniya/uFuz
 };
 const ufuzzy = new uFuzzy(opts);
 
+getDateParm();
 let currentState = states[0];
 let haystack = currentState.data; // metaphor: we search for needle in haystack
 currentState.handler();
