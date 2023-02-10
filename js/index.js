@@ -41,6 +41,14 @@ function getOrderParm(){
   return scrub(order);
 }
 
+function template(suffix, index){
+  return {
+    htmlLabel: document.getElementById("label_" + suffix ),
+    button: document.getElementById("button_" + suffix),
+    buffer: document.getElementById("buffer_" + suffix),
+    handler: stateChangeHandler(index)
+  }
+}
 
 function buildStates() {
   const order = getOrderParm();
@@ -81,45 +89,33 @@ function buildStates() {
       prompt: "Search for Moar Post Shave",
       label: "Moar Post Shave",
     },
+    "F": {
+      data: frags,
+      markdown: "* **Fragrance:** ",
+      prompt: "Search for Fragrance",
+      label: "Frag",
+    },
+    "p": {
+      data: preps,
+      markdown: "* **Prep:** ",
+      prompt: "Search for Prep",
+      label: "Prep",
+    },
+
   };
+
   const stateTemplates = [
-    {
-      htmlLabel: document.getElementById("label_00"),
-      button: document.getElementById("button_00"),
-      buffer: document.getElementById("buffer_00"),
-      handler: stateChangeHandler(0),
-    },
-    {
-      htmlLabel: document.getElementById("label_01"),
-      button: document.getElementById("button_01"),
-      buffer: document.getElementById("buffer_01"),
-      handler: stateChangeHandler(1),
-    },
-    {
-      htmlLabel: document.getElementById("label_02"),
-      button: document.getElementById("button_02"),
-      buffer: document.getElementById("buffer_02"),
-      handler: stateChangeHandler(2),
-    },
-    {
-      htmlLabel: document.getElementById("label_03"),
-      button: document.getElementById("button_03"),
-      buffer: document.getElementById("buffer_03"),
-      handler: stateChangeHandler(3),
-    },
-    {
-      htmlLabel: document.getElementById("label_04"),
-      button: document.getElementById("button_04"),
-      buffer: document.getElementById("buffer_04"),
-      handler: stateChangeHandler(4),
-    },
-    {
-      htmlLabel: document.getElementById("label_05"),
-      button: document.getElementById("button_05"),
-      buffer: document.getElementById("buffer_05"),
-      handler: stateChangeHandler(5),
-    },
+     template('00',0),
+     template('01',1),
+     template('02',2),
+     template('03',3),
+     template('04',4),
+     template('05',5),
+     template('06',6),
+     template('07',7),
   ];
+
+
   let result = [];
   for (let b = 0; b < stateTemplates.length; b++){
      stateTemplates[b].htmlLabel.style.display = 'none'
