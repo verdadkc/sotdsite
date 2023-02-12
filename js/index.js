@@ -10,7 +10,6 @@ const copyButton = document.getElementById("copy_sotd");
 const useButton = document.getElementById("use_it");
 const dateBuffer = { date: ''};
 
-
 function getDateParm(){
   const parms = new URL(location.href).searchParams;
   const date = parms.get('date');
@@ -45,7 +44,7 @@ function template(suffix, index){
   return {
     htmlLabel: document.getElementById("label_" + suffix ),
     button: document.getElementById("button_" + suffix),
-    buffer: document.getElementById("buffer_" + suffix),
+    buffer: '',
     handler: stateChangeHandler(index)
   }
 }
@@ -168,7 +167,7 @@ function storeSearchResult() {
 }
 
 function storeResult(txt) {
-  currentState.buffer.value = txt;
+  currentState.buffer = txt;
   renderSotd();
   states[currentState.next].handler();
 }
@@ -178,7 +177,7 @@ function renderSotd() {
   sotd.value += dateBuffer.date + '\n\n';
   const keys = Object.keys(states);
   keys.forEach((key) => {
-    var item = states[key].buffer.value.trim();
+    var item = states[key].buffer.trim();
     if (item != '') {
       sotd.value += states[key].markdown + item + "  \n";
     }
@@ -253,7 +252,7 @@ useButton.addEventListener("click", storeSearchString);
 const keys = Object.keys(states);
 keys.forEach((key) => {
   states[key].button.addEventListener("click", states[key].handler);
-  states[key].buffer.value = "";
+  states[key].buffer = "";
   states[key].htmlLabel.innerText = states[key].label;
 });
 sotd.value = "";
