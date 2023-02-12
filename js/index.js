@@ -1,7 +1,7 @@
 "use strict";
 
 import { uFuzzy } from "../node_modules/@leeoniya/ufuzzy/dist/uFuzzy.iife.js";
-import { blades, brushes, lathers, postshaves, razors } from "./data.js";
+import { blades, brushes, lathers, postshaves, razors, frags, preps } from "./data.js";
 
 const searchBox = document.getElementById("searchbox");
 const searchResults = document.getElementById("searchresults");
@@ -29,9 +29,9 @@ function getDateParm(){
 
 function getOrderParm(){
   function scrub(word){
-    const validChars = ['B', 'L', 'R', 'b', 'P', 'M'];
+    const validChars = ['B', 'L', 'R', 'b', 'P', 'M', 'p', 'F'];
     const order = word.split('').filter((c)=>validChars.includes(c));
-    const maxLen = Math.min(6, order.length)
+    const maxLen = Math.min(8, order.length)
     return order.slice(0,maxLen) // max of 6 categories are currently supported
   }
   const defaultOrder = 'LBRbPM';
