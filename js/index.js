@@ -8,7 +8,7 @@ const searchResults = document.getElementById("searchresults");
 const sotd = document.getElementById("sotd");
 const copyButton = document.getElementById("copy_sotd");
 const useButton = document.getElementById("use_it");
-const dateBuffer = document.getElementById("date_buffer");
+const dateBuffer = { date: ''};
 
 
 function getDateParm(){
@@ -17,13 +17,13 @@ function getDateParm(){
   const today = new Date();
   switch(date){
     case 'D':
-      dateBuffer.value = today.toDateString();
+      dateBuffer.date = today.toDateString();
       break;
     case 'd':
-      dateBuffer.value = today.toLocaleDateString();
+      dateBuffer.date = today.toLocaleDateString();
       break;
     default:
-      dateBuffer.value = '';
+      dateBuffer.date = '';
   }
 }
 
@@ -175,7 +175,7 @@ function storeResult(txt) {
 
 function renderSotd() {
   sotd.value = '';
-  sotd.value += dateBuffer.value + '\n\n';
+  sotd.value += dateBuffer.date + '\n\n';
   const keys = Object.keys(states);
   keys.forEach((key) => {
     var item = states[key].buffer.value.trim();
