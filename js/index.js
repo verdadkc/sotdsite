@@ -40,10 +40,8 @@ function getOrderParm(){
   return scrub(order);
 }
 
-function template(suffix, index){
+function template(index){
   return {
-    htmlLabel: document.getElementById("label_" + suffix ),
-    button: document.getElementById("button_" + suffix),
     buffer: '',
     handler: stateChangeHandler(index)
   }
@@ -104,23 +102,19 @@ function buildStates() {
   };
 
   const stateTemplates = [
-     template('00',0),
-     template('01',1),
-     template('02',2),
-     template('03',3),
-     template('04',4),
-     template('05',5),
-     template('06',6),
-     template('07',7),
+     template(0),
+     template(1),
+     template(2),
+     template(3),
+     template(4),
+     template(5),
+     template(6),
+     template(7),
   ];
 
 
   let result = [];
-  for (let b = 0; b < stateTemplates.length; b++){
-     stateTemplates[b].htmlLabel.style.display = 'none'
-  }
   for (let k = 0; k < order.length; k++) {
-    stateTemplates[k].htmlLabel.style.display = '';
     stateTemplates[k].next = (k+1)%order.length;
     result[k] = { ...stateData[order[k]], ...stateTemplates[k] };
   }
@@ -132,7 +126,6 @@ const states = buildStates() ;
 function stateChangeHandler(idx) {
   return () => {
     currentState = states[idx];
-    currentState.button.checked = true;
     haystack = currentState.data;
     searchBox.placeholder = currentState.prompt;
     searchBox.value = "";
@@ -251,9 +244,7 @@ useButton.addEventListener("click", storeSearchString);
 
 const keys = Object.keys(states);
 keys.forEach((key) => {
-  states[key].button.addEventListener("click", states[key].handler);
   states[key].buffer = "";
-  states[key].htmlLabel.innerText = states[key].label;
 });
 sotd.value = "";
 
