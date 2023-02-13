@@ -1,15 +1,14 @@
 "use strict";
 
 import { uFuzzy } from "../node_modules/@leeoniya/ufuzzy/dist/uFuzzy.iife.js";
-import { blades, brushes, lathers, postshaves, razors } from "./data.js";
+import { blades, brushes, lathers, postshaves, razors, frags, preps } from "./data.js";
 
 const searchBox = document.getElementById("searchbox");
 const searchResults = document.getElementById("searchresults");
 const sotd = document.getElementById("sotd");
 const copyButton = document.getElementById("copy_sotd");
 const useButton = document.getElementById("use_it");
-const dateBuffer = document.getElementById("date_buffer");
-
+const dateBuffer = { date: ''};
 
 function getDateParm(){
   const parms = new URL(location.href).searchParams;
@@ -17,21 +16,21 @@ function getDateParm(){
   const today = new Date();
   switch(date){
     case 'D':
-      dateBuffer.value = today.toDateString();
+      dateBuffer.date = today.toDateString();
       break;
     case 'd':
-      dateBuffer.value = today.toLocaleDateString();
+      dateBuffer.date = today.toLocaleDateString();
       break;
     default:
-      dateBuffer.value = '';
+      dateBuffer.date = '';
   }
 }
 
 function getOrderParm(){
   function scrub(word){
-    const validChars = ['B', 'L', 'R', 'b', 'P', 'M'];
+    const validChars = ['B', 'L', 'R', 'b', 'P', 'M', 'p', 'F'];
     const order = word.split('').filter((c)=>validChars.includes(c));
-    const maxLen = Math.min(6, order.length)
+    const maxLen = Math.min(8, order.length)
     return order.slice(0,maxLen) // max of 6 categories are currently supported
   }
   const defaultOrder = 'LBRbPM';
@@ -41,6 +40,14 @@ function getOrderParm(){
   return scrub(order);
 }
 
+function template(suffix, index){
+  return {
+    htmlLabel: document.getElementById("label_" + suffix ),
+    button: document.getElementById("button_" + suffix),
+    buffer: '',
+    handler: stateChangeHandler(index)
+  }
+}
 
 function buildStates() {
   const order = getOrderParm();
@@ -81,45 +88,33 @@ function buildStates() {
       prompt: "Search for Moar Post Shave",
       label: "Moar Post Shave",
     },
+    "F": {
+      data: frags,
+      markdown: "* **Fragrance:** ",
+      prompt: "Search for Fragrance",
+      label: "Frag",
+    },
+    "p": {
+      data: preps,
+      markdown: "* **Prep:** ",
+      prompt: "Search for Prep",
+      label: "Prep",
+    },
+
   };
+
   const stateTemplates = [
-    {
-      htmlLabel: document.getElementById("label_00"),
-      button: document.getElementById("button_00"),
-      buffer: document.getElementById("buffer_00"),
-      handler: stateChangeHandler(0),
-    },
-    {
-      htmlLabel: document.getElementById("label_01"),
-      button: document.getElementById("button_01"),
-      buffer: document.getElementById("buffer_01"),
-      handler: stateChangeHandler(1),
-    },
-    {
-      htmlLabel: document.getElementById("label_02"),
-      button: document.getElementById("button_02"),
-      buffer: document.getElementById("buffer_02"),
-      handler: stateChangeHandler(2),
-    },
-    {
-      htmlLabel: document.getElementById("label_03"),
-      button: document.getElementById("button_03"),
-      buffer: document.getElementById("buffer_03"),
-      handler: stateChangeHandler(3),
-    },
-    {
-      htmlLabel: document.getElementById("label_04"),
-      button: document.getElementById("button_04"),
-      buffer: document.getElementById("buffer_04"),
-      handler: stateChangeHandler(4),
-    },
-    {
-      htmlLabel: document.getElementById("label_05"),
-      button: document.getElementById("button_05"),
-      buffer: document.getElementById("buffer_05"),
-      handler: stateChangeHandler(5),
-    },
+     template('00',0),
+     template('01',1),
+     template('02',2),
+     template('03',3),
+     template('04',4),
+     template('05',5),
+     template('06',6),
+     template('07',7),
   ];
+
+
   let result = [];
   for (let b = 0; b < stateTemplates.length; b++){
      stateTemplates[b].htmlLabel.style.display = 'none'
@@ -172,17 +167,17 @@ function storeSearchResult() {
 }
 
 function storeResult(txt) {
-  currentState.buffer.value = txt;
+  currentState.buffer = txt;
   renderSotd();
   states[currentState.next].handler();
 }
 
 function renderSotd() {
   sotd.value = '';
-  sotd.value += dateBuffer.value + '\n\n';
+  sotd.value += dateBuffer.date + '\n\n';
   const keys = Object.keys(states);
   keys.forEach((key) => {
-    var item = states[key].buffer.value.trim();
+    var item = states[key].buffer.trim();
     if (item != '') {
       sotd.value += states[key].markdown + item + "  \n";
     }
@@ -257,7 +252,7 @@ useButton.addEventListener("click", storeSearchString);
 const keys = Object.keys(states);
 keys.forEach((key) => {
   states[key].button.addEventListener("click", states[key].handler);
-  states[key].buffer.value = "";
+  states[key].buffer = "";
   states[key].htmlLabel.innerText = states[key].label;
 });
 sotd.value = "";
