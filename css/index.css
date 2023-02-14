@@ -30,7 +30,7 @@ li:focus {
   position: relative;
 }
 
-#copy_sotd, #use_it{
+.button {
 height: 30%;
 display: block;
 background: hsla(150, 75%, 50%, 1);
@@ -44,7 +44,7 @@ box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
 position: relative;
 }
 
-#copy_sotd:active, #use_it:active {
+.button:active {
   background: rgb(223, 223, 32);
 }
 

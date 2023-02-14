@@ -8,13 +8,20 @@ const searchResults = document.getElementById("searchresults");
 const sotd = document.getElementById("sotd");
 const copyButton = document.getElementById("copy_sotd");
 const useButton = document.getElementById("use_it");
+const nextButton = document.getElementById("next");
+const prevButton = document.getElementById("prev");
 const dateBuffer = { date: ''};
+
+let currentState;
+
+function mod(n, m) { //Force the result to be in 0..n-1 even when n<0
+  return ((n % m) + m) % m;
+}
 
 function getDateParm(){
   const parms = new URL(location.href).searchParams;
-  const date = parms.get('date');
   const today = new Date();
-  switch(date){
+  switch(parms.get('date')){
     case 'D':
       dateBuffer.date = today.toDateString();
       break;
@@ -31,13 +38,12 @@ function getOrderParm(){
     const validChars = ['B', 'L', 'R', 'b', 'P', 'M', 'p', 'F'];
     return word.split('').filter((c)=>validChars.includes(c));
   }
-  const defaultOrder = 'LBRbPM';
+  const defaultOrder = 'LBRbP';
   const parms = new URL(location.href).searchParams;
   const order = parms.get('order');
   if (order == null || order == '') return scrub(defaultOrder);
   return scrub(order);
 }
-
 
 function buildStates(order) {
   const stateData = {
@@ -45,56 +51,48 @@ function buildStates(order) {
       data: lathers,
       markdown: "* **Lather:** ",
       prompt: "Search for Lather",
-      label: "Lather",
       buffer: ''
     },
     "B": {
       data: brushes,
       markdown: "* **Brush:** ",
       prompt: "Search for Brush",
-      label: "B=rush",
       buffer: ''
     },
     "R": {
       data: razors,
       markdown: "* **Razor:** ",
       prompt: "Search for Razor",
-      label: "Razor",
       buffer: ''
     },
     "b": {
       data: blades,
       markdown: "* **Blade:** ",
       prompt: "Search for Blade",
-      label: "Blade",
       buffer: ''
     },
     "P": {
       data: postshaves,
       markdown: "* **Post Shave:** ",
       prompt: "Search for Post Shave",
-      label: "Post Shave",
       buffer: ''
     },
     "M": {
       data: postshaves,
       markdown: "* **Post Shave:** ",
       prompt: "Search for Moar Post Shave",
-      label: "Moar Post Shave",
       buffer: ''
     },
     "F": {
       data: frags,
       markdown: "* **Fragrance:** ",
       prompt: "Search for Fragrance",
-      label: "Frag",
       buffer: ''
     },
     "p": {
       data: preps,
       markdown: "* **Prep:** ",
       prompt: "Search for Prep",
-      label: "Prep",
       buffer: ''
     },
 
@@ -103,9 +101,11 @@ function buildStates(order) {
   let result = [];
   for (let k = 0; k < order.length; k++) {
     stateTemplates.push({ handler: stateChangeHandler(k) });
-    stateTemplates[k].next = (k+1)%order.length;
+    stateTemplates[k].next = mod(k+1, order.length);
+    stateTemplates[k].prev = mod(k-1, order.length);
     result[k] = { ...stateData[order[k]], ...stateTemplates[k] };
   }
+  console.log('states:', result)
   return result;
 }
 
@@ -137,7 +137,7 @@ function storeSearchString() {
   if (value != "") {
     storeResult(value);
   } else {
-    states[currentState.next].handler();
+    nextState();
   }
 }
 
@@ -149,21 +149,19 @@ function storeSearchResult() {
 }
 
 function storeResult(txt) {
-  currentState.buffer = txt;
+  currentState.buffer = txt.trim();
   renderSotd();
-  states[currentState.next].handler();
+  nextState();
 }
 
 function renderSotd() {
   sotd.value = '';
-  sotd.value += dateBuffer.date + '\n\n';
+  if (dateBuffer.date){
+     sotd.value += dateBuffer.date + '\n\n';
+  }
   const keys = Object.keys(states);
   keys.forEach((key) => {
-    var item = states[key].buffer.trim();
-    if (true){
-    //if (item != ''){
-      sotd.value += states[key].markdown + item + "  \n";
-    }
+    sotd.value += states[key].markdown + states[key].buffer + "\n";
   });
 }
 
@@ -205,9 +203,7 @@ function renderSearchResults(event) {
 }
 
 function focusChange(delta) {
-  function mod(n, m) { //Force the result to be in 0..n-1 even when n<0
-    return ((n % m) + m) % m;
-  }
+
   const items = Array.from(
     searchResults.getElementsByClassName("searchresult"),
   );
@@ -223,6 +219,14 @@ function copySotd() {
   window.navigator.clipboard.writeText(sotd.value);
 }
 
+function nextState(){
+  states[currentState.next].handler();
+}
+
+function prevState(){
+  states[currentState.prev].handler();
+}
+
 searchBox.addEventListener("input", renderSearchResults);
 searchBox.addEventListener("keydown", enterKeyHandler);
 
@@ -231,12 +235,14 @@ searchResults.addEventListener("click", storeSearchResult);
 
 copyButton.addEventListener("click", copySotd);
 useButton.addEventListener("click", storeSearchString);
+nextButton.addEventListener("click", nextState);
+prevButton.addEventListener("click", prevState);
 
-const keys = Object.keys(states);
-keys.forEach((key) => {
-  states[key].buffer = "";
-});
-sotd.value = "";
+//const keys = Object.keys(states);
+// keys.forEach((key) => {
+//   states[key].buffer = "";
+// });
+// sotd.value = "";
 
 const opts = { // Search library documentation lives at github.com/leeoniya/uFuzzy
   interIns: Infinity,
@@ -251,7 +257,7 @@ const opts = { // Search library documentation lives at github.com/leeoniya/uFuz
 const ufuzzy = new uFuzzy(opts);
 
 getDateParm();
-let currentState = states[0];
+currentState = states[0];
 let haystack = currentState.data; // metaphor: we search for needle in haystack
 currentState.handler();
 renderSotd()
