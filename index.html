@@ -10,15 +10,12 @@
   <script type="module" src="js/data.js"></script>
 </head>
 <body>
-    <textarea id="sotd" rows="9" cols="90"> </textarea>
-    <input id="searchbox" tabindex="0"  type="text" placeholder="Search for lather here" autofocus >
-
+    <textarea id="sotd" rows="10 " cols="90"  tabindex="-1" readonly > </textarea>
     <section>
       <button id="copy_sotd" tabindex="-1" type="button">Copy SOTD </button>
       <button id="use_it" tabindex="-1" type="button">Use search string as is</button>
     </section>
-
+    <input id="searchbox" tabindex="0"  type="text" placeholder="Search for lather here" autofocus >
     <form><ul id="searchresults"></ul></form>
-
 </body>
 </html>

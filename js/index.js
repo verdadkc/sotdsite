@@ -29,99 +29,88 @@ function getDateParm(){
 function getOrderParm(){
   function scrub(word){
     const validChars = ['B', 'L', 'R', 'b', 'P', 'M', 'p', 'F'];
-    const order = word.split('').filter((c)=>validChars.includes(c));
-    const maxLen = Math.min(8, order.length)
-    return order.slice(0,maxLen) // max of 6 categories are currently supported
+    return word.split('').filter((c)=>validChars.includes(c));
   }
   const defaultOrder = 'LBRbPM';
   const parms = new URL(location.href).searchParams;
   const order = parms.get('order');
-  if (order == null || order == '') return defaultOrder;
+  if (order == null || order == '') return scrub(defaultOrder);
   return scrub(order);
 }
 
-function template(index){
-  return {
-    buffer: '',
-    handler: stateChangeHandler(index)
-  }
-}
 
-function buildStates() {
-  const order = getOrderParm();
+function buildStates(order) {
   const stateData = {
     "L": {
       data: lathers,
       markdown: "* **Lather:** ",
       prompt: "Search for Lather",
       label: "Lather",
+      buffer: ''
     },
     "B": {
       data: brushes,
       markdown: "* **Brush:** ",
       prompt: "Search for Brush",
-      label: "Brush",
+      label: "B=rush",
+      buffer: ''
     },
     "R": {
       data: razors,
       markdown: "* **Razor:** ",
       prompt: "Search for Razor",
       label: "Razor",
+      buffer: ''
     },
     "b": {
       data: blades,
       markdown: "* **Blade:** ",
       prompt: "Search for Blade",
       label: "Blade",
+      buffer: ''
     },
     "P": {
       data: postshaves,
       markdown: "* **Post Shave:** ",
       prompt: "Search for Post Shave",
       label: "Post Shave",
+      buffer: ''
     },
     "M": {
       data: postshaves,
       markdown: "* **Post Shave:** ",
       prompt: "Search for Moar Post Shave",
       label: "Moar Post Shave",
+      buffer: ''
     },
     "F": {
       data: frags,
       markdown: "* **Fragrance:** ",
       prompt: "Search for Fragrance",
       label: "Frag",
+      buffer: ''
     },
     "p": {
       data: preps,
       markdown: "* **Prep:** ",
       prompt: "Search for Prep",
       label: "Prep",
+      buffer: ''
     },
 
   };
-
-  const stateTemplates = [
-     template(0),
-     template(1),
-     template(2),
-     template(3),
-     template(4),
-     template(5),
-     template(6),
-     template(7),
-  ];
-
-
+  let stateTemplates = [];
   let result = [];
   for (let k = 0; k < order.length; k++) {
+    stateTemplates.push({ handler: stateChangeHandler(k) });
     stateTemplates[k].next = (k+1)%order.length;
     result[k] = { ...stateData[order[k]], ...stateTemplates[k] };
   }
   return result;
 }
 
-const states = buildStates() ;
+const order = getOrderParm();
+const states = buildStates(order) ;
 
 function stateChangeHandler(idx) {
   return () => {
@@ -171,7 +160,8 @@ function renderSotd() {
   const keys = Object.keys(states);
   keys.forEach((key) => {
     var item = states[key].buffer.trim();
-    if (item != '') {
+    if (true){
+    //if (item != ''){
       sotd.value += states[key].markdown + item + "  \n";
     }
   });
@@ -264,3 +254,4 @@ getDateParm();
 let currentState = states[0];
 let haystack = currentState.data; // metaphor: we search for needle in haystack
 currentState.handler();
+renderSotd()
