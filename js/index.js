@@ -109,7 +109,9 @@ function buildStates(order) {
   return result;
 }
 
+getDateParm()
 const order = getOrderParm();
+sotd.setAttribute('rows', dateBuffer.date ? order.length + 2 : order.length);
 const states = buildStates(order) ;
 
 function stateChangeHandler(idx) {
@@ -238,12 +240,6 @@ useButton.addEventListener("click", storeSearchString);
 nextButton.addEventListener("click", nextState);
 prevButton.addEventListener("click", prevState);
 
-//const keys = Object.keys(states);
-// keys.forEach((key) => {
-//   states[key].buffer = "";
-// });
-// sotd.value = "";
-
 const opts = { // Search library documentation lives at github.com/leeoniya/uFuzzy
   interIns: Infinity,
   interLft: 0,
@@ -256,7 +252,6 @@ const opts = { // Search library documentation lives at github.com/leeoniya/uFuz
 };
 const ufuzzy = new uFuzzy(opts);
 
-getDateParm();
 currentState = states[0];
 let haystack = currentState.data; // metaphor: we search for needle in haystack
 currentState.handler();
