@@ -10,41 +10,14 @@
   <script type="module" src="js/data.js"></script>
 </head>
 <body>
+    <textarea id="sotd" rows="10 " cols="90"  tabindex="-1" readonly > </textarea>
+    <section>
+      <button class="button" id="copy_sotd" tabindex="-1" type="button">Copy</button>
+      <button class="button" id="use_it" tabindex="-1" type="button">Use search string</button>
+      <button class="button" id="prev" tabindex="-1" type="button">Prev</button>
+      <button class="button" id="next" tabindex="-1" type="button">Next</button>
+    </section>
     <input id="searchbox" tabindex="0"  type="text" placeholder="Search for lather here" autofocus >
-
-    <section>
-      <button id="use_it" tabindex="-1" type="button">Use search string as is</button>
-      <button id="copy_sotd" tabindex="-1" type="button">Copy SOTD </button>
-    </section>
-
     <form><ul id="searchresults"></ul></form>
-    <textarea id="sotd" rows="9" cols="90"> </textarea>
-
-    <section>
-      <input type="radio" id="button_00" name="select" >
-      <label for="button_00" id="label_00" ></label>
-
-      <input type="radio" id="button_01" name="select">
-      <label for="button_01" id="label_01" ></label>
-
-      <input type="radio" id="button_02" name="select">
-      <label for="button_02" id="label_02"></label>
-
-      <input type="radio" id="button_03" name="select">
-      <label for="button_03" id="label_03"></label>
-
-      <input type="radio" id="button_04" name="select">
-      <label for="button_04" id="label_04"></label>
-
-      <input type="radio" id="button_05" name="select">
-      <label for="button_05" id="label_05"></label>
-
-      <input type="radio" id="button_06" name="select">
-      <label for="button_06" id="label_06"></label>
-
-      <input type="radio" id="button_07" name="select">
-      <label for="button_07" id="label_07"></label>
-    </section>
-
 </body>
 </html>
