@@ -176,6 +176,9 @@ function enterKeyHandler(event) {
       storeResult(searchResults.firstChild.textContent);
     }
   }
+  if (event.key == "ArrowDown" && searchResults.children[1]) {
+    searchResults.children[1].focus()
+  }
 }
 
 function renderSearchResults(event) {
