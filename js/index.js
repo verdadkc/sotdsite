@@ -105,7 +105,6 @@ function buildStates(order) {
     stateTemplates[k].prev = mod(k-1, order.length);
     result[k] = { ...stateData[order[k]], ...stateTemplates[k] };
   }
-  console.log('states:', result)
   return result;
 }
 
@@ -173,7 +172,7 @@ function enterKeyHandler(event) {
     if (count == 0) {
       storeSearchString();
     }
-    if (count == 1) {
+    if (count > 0) {
       storeResult(searchResults.firstChild.textContent);
     }
   }
@@ -194,7 +193,12 @@ function renderSearchResults(event) {
     let result;
     for (var k = 0; k < idxs.length; k++) {
       result = haystack[idxs[k]];
-      searchResults.appendChild(li(result));
+      if (result.trim() != ''){
+        searchResults.appendChild(li(result));
+      }
+    }
+    if (searchResults.firstChild) {
+      searchResults.firstChild.setAttribute('targeted', '');
     }
   }
   searchResults.innerHTML = "";
@@ -229,8 +233,19 @@ function prevState(){
   states[currentState.prev].handler();
 }
 
+function onBlur(){
+  const first = searchResults.firstChild;
+  if (first) first.removeAttribute('targeted');
+}
+function onFocus(){
+  const first = searchResults.firstChild;
+  if (first) first.setAttribute('targeted', '');
+}
+
 searchBox.addEventListener("input", renderSearchResults);
 searchBox.addEventListener("keydown", enterKeyHandler);
+searchBox.addEventListener("blur", onBlur);
+searchBox.addEventListener("focus", onFocus);
 
 searchResults.addEventListener("keydown", checkKey);
 searchResults.addEventListener("click", storeSearchResult);
