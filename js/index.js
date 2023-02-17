@@ -105,7 +105,6 @@ function buildStates(order) {
     stateTemplates[k].prev = mod(k-1, order.length);
     result[k] = { ...stateData[order[k]], ...stateTemplates[k] };
   }
-  console.log('states:', result)
   return result;
 }
 
