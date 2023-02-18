@@ -193,7 +193,9 @@ function renderSearchResults(event) {
     let result;
     for (var k = 0; k < idxs.length; k++) {
       result = haystack[idxs[k]];
-      searchResults.appendChild(li(result));
+      if (result.trim() != ''){
+        searchResults.appendChild(li(result));
+      }
     }
   }
   searchResults.innerHTML = "";
