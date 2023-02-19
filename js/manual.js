@@ -18,54 +18,44 @@ function mod(n, m) { //Force the result to be in 0..n-1 even when n<0
 
 function date(){
   const today = new Date();
-  sotd.style.display = 'block';
-  sotdAppend(`${today.toDateString()}  \n`);
-  clearSearchBox();
+  renderSotd(today.toDateString());
 }
-
 
 const states = {
     "lather": {
       data: lathers,
       markdown: "* **Lather:** ",
       prompt: "Search for Lather",
-      buffer: ''
     },
     "brush": {
       data: brushes,
       markdown: "* **Brush:** ",
       prompt: "Search for Brush",
-      buffer: ''
     },
     "razor": {
       data: razors,
       markdown: "* **Razor:** ",
       prompt: "Search for Razor",
-      buffer: ''
     },
     "blade": {
       data: blades,
       markdown: "* **Blade:** ",
       prompt: "Search for Blade",
-      buffer: ''
     },
     "postshave": {
       data: postshaves,
       markdown: "* **Post Shave:** ",
       prompt: "Search for Post Shave",
-      buffer: ''
     },
     "fragrance": {
       data: frags,
       markdown: "* **Fragrance:** ",
       prompt: "Search for Fragrance",
-      buffer: ''
     },
     "prep": {
       data: preps,
       markdown: "* **Prep:** ",
       prompt: "Search for Prep",
-      buffer: ''
     },
 };
 
@@ -85,28 +75,28 @@ function checkKey(event) {
   const callback = {
     "ArrowUp": () => focusChange(-1),
     "ArrowDown": () => focusChange(1),
-    "Enter": () => storeResult(document.activeElement.textContent),
+    "Enter": () => useResult(document.activeElement.textContent),
   }[event.key];
   callback?.();
 }
 
-function storeSearchString() {
+function useSearchString() {
   const value = searchBox.value.trim();
   if (value != "") {
-    storeResult(value);
+    useResult(value);
   }
 }
 
-function storeSearchResult() {
+function useSearchResult() {
   const active = document.activeElement;
   if (active.parentElement == searchResults) {
-    storeResult(active.textContent.trim());
+    useResult(active.textContent.trim());
   }
 }
 
-function storeResult(txt) {
-  currentState.buffer = txt.trim();
-  renderSotd();
+function useResult(txt) {
+  const text = `${currentState.markdown} ${txt.trim()}`;
+  renderSotd(text);
 }
 
 function sotdDrop(){
@@ -131,9 +121,9 @@ function clearSearchBox(){
   searchResults.innerHTML = '';
 }
 
-function renderSotd() {
+function renderSotd(text) {
   sotd.style.display = 'block';
-  sotdAppend(`${currentState.markdown} ${currentState.buffer} \n`);
+  sotdAppend(`${text.trim()} \n`);
   clearSearchBox();
 }
 
@@ -141,10 +131,10 @@ function enterKeyHandler(event) {
   if (event.key == "Enter") {
     const count = searchResults.childElementCount;
     if (count == 0) {
-      storeSearchString();
+      useSearchString();
     }
     if (count > 0) {
-      storeResult(searchResults.firstChild.textContent);
+      useResult(searchResults.firstChild.textContent);
     }
   }
   if (event.key == "ArrowDown" && searchResults.children[1]) {
@@ -219,10 +209,10 @@ searchBox.addEventListener("blur", onBlur);
 searchBox.addEventListener("focus", onFocus);
 
 searchResults.addEventListener("keydown", checkKey);
-searchResults.addEventListener("click", storeSearchResult);
+searchResults.addEventListener("click", useSearchResult);
 
 copyButton.addEventListener("click", copySotd);
-useButton.addEventListener("click", storeSearchString);
+useButton.addEventListener("click", useSearchString);
 
 const latherButton = document.getElementById('lather');
 latherButton.addEventListener('click', handler('lather'));
