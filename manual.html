@@ -4,25 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SOTD/manual</title>
-  <link rel="stylesheet" type="text/css" href="css/index.css" >
+  <link rel="stylesheet" type="text/css" href="css/manual.css" >
   <script type="module" src="node_modules/@leeoniya/ufuzzy/dist/uFuzzy.iife.js"></script>
   <script type="module" src="js/manual.js"></script>
   <script type="module" src="js/data.js"></script>
 </head>
 <body>
-    <textarea id="sotd" rows="10 " cols="90"  tabindex="-1" readonly > </textarea>
+    <!-- <textarea id="sotd" rows="10 " cols="90"  tabindex="-1" readonly > </textarea> -->
+    <form><ul id="sotd" tabindex="-1"  ></ul></form>
     <section>
-      <button class="button" id="copy_sotd" tabindex="-1" type="button">Copy</button>
+      <button class="button" id="copy_sotd" tabindex="-1" type="button">Copy sotd</button>
       <button class="button" id="use_it" tabindex="-1" type="button">Use search string</button>
+      <button class="button" id="undo" tabindex="-1" type="button">Undo</button>
     </section>
     <section>
+      <button class="button" id="date"      tabindex="-1"  type="button">Date</button>
       <button class="button" id="prep"      tabindex="-1"  type="button">Prep</button>
       <button class="button" id="razor"     tabindex="-1"  type="button">Razor</button>
       <button class="button" id="blade"     tabindex="-1"  type="button">Blade</button>
-      <button class="button" id="lather"    tabindex="-1"  type="button">Lather</button>
       <button class="button" id="brush"     tabindex="-1"  type="button">Brush</button>
+      <button class="button" id="lather"    tabindex="-1"  type="button">Lather</button>
+      <button class="button" id="postshave" tabindex="-1"  type="button">Post</button>
       <button class="button" id="frag"      tabindex="-1"  type="button">Frag</button>
-      <button class="button" id="postshave" tabindex="-1"  type="button">Post Shave</button>
     </section>
     <input id="searchbox" tabindex="0"  type="text" placeholder="First choose a product, then search here." autofocus >
     <form><ul id="searchresults"></ul></form>

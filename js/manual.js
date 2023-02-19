@@ -16,20 +16,12 @@ function mod(n, m) { //Force the result to be in 0..n-1 even when n<0
   return ((n % m) + m) % m;
 }
 
-// function getDateParm(){
-//   const parms = new URL(location.href).searchParams;
-//   const today = new Date();
-//   switch(parms.get('date')){
-//     case 'D':
-//       dateBuffer.date = today.toDateString();
-//       break;
-//     case 'd':
-//       dateBuffer.date = today.toLocaleDateString();
-//       break;
-//     default:
-//       dateBuffer.date = '';
-//   }
-// }
+function date(){
+  const today = new Date();
+  sotd.style.display = 'block';
+  sotdAppend(`${today.toDateString()}  \n`);
+  clearSearchBox();
+}
 
 
 const states = {
@@ -77,9 +69,6 @@ const states = {
     },
 };
 
-//sotd.setAttribute('rows', dateBuffer.date ? order.length + 2 : order.length);
-//const states = buildStates(order) ;
-
 function handler(key) {
   const state = states[key];
   return () => {
@@ -120,12 +109,32 @@ function storeResult(txt) {
   renderSotd();
 }
 
-function renderSotd() {
-  sotd.value += `${currentState.markdown} ${currentState.buffer} \n`;
+function sotdDrop(){
+  if (sotd.lastChild){
+    sotd.removeChild(sotd.lastChild);
+    haystack = null;
+  }
+}
+
+function sotdAppend(text){
+  const item = document.createElement("li");
+  item.innerText = text;
+  sotd.appendChild(item);
+}
+
+
+function clearSearchBox(){
   searchBox.value = '';
-  searchResults.innerHTML = '';
-  searchBox.focus();
   searchBox.placeholder = 'Choose a product.';
+  searchBox.focus();
+  haystack = null;
+  searchResults.innerHTML = '';
+}
+
+function renderSotd() {
+  sotd.style.display = 'block';
+  sotdAppend(`${currentState.markdown} ${currentState.buffer} \n`);
+  clearSearchBox();
 }
 
 function enterKeyHandler(event) {
@@ -166,6 +175,11 @@ function renderSearchResults(event) {
       searchResults.firstChild.setAttribute('targeted', '');
     }
   }
+  if (!haystack) {
+    clearSearchBox();
+    searchBox.placeholder = 'First choose a product, then search here.';
+    return;
+  }
   searchResults.innerHTML = "";
   const { value: target, _ } = event.target;
   if (target != "") {
@@ -186,7 +200,7 @@ function focusChange(delta) {
 }
 
 function copySotd() {
-  window.navigator.clipboard.writeText(sotd.value);
+  window.navigator.clipboard.writeText(sotd.innerHTML);
 }
 
 function onBlur(){
@@ -231,6 +245,12 @@ postShaveButton.addEventListener('click', handler('postshave'));
 const prepButton = document.getElementById('prep');
 prepButton.addEventListener('click', handler('prep'));
 
+const undoButton = document.getElementById('undo');
+undoButton.addEventListener('click', sotdDrop)
+
+const dateButton = document.getElementById('date');
+dateButton.addEventListener('click', date)
+
 const opts = { // Search library documentation lives at github.com/leeoniya/uFuzzy
   interIns: Infinity,
   interLft: 0,
@@ -243,6 +263,6 @@ const opts = { // Search library documentation lives at github.com/leeoniya/uFuz
 };
 
 const ufuzzy = new uFuzzy(opts);
-sotd.value = '';
-searchBox.value = '';
-searchResults.innerHTML = '';
+sotd.style.display = 'none';
+sotd.innerHTML= '';
+clearSearchBox();

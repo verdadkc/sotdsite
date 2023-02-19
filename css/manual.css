@@ -1,0 +1,52 @@
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin: 10px 0;
+}
+
+li[targeted] {
+  background-color:rgb(148, 226, 187);
+  outline-style: none;
+}
+
+li:focus {
+  background-color:rgb(148, 226, 187);
+  outline-style: none;
+}
+
+#searchbox, #sotd, #matches{
+  height: 30%;
+  width: 83%;
+  display: block;
+  background: white;
+  border: 2px solid hsla(150, 75%, 50%, 1);
+  border-radius: 20px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  margin: 1rem;
+  box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
+  position: relative;
+}
+
+.button {
+display: inline;
+background: hsla(150, 75%, 50%, 1);
+border: 1px solid hsla(150, 75%, 50%, 1);
+border-radius: 10px;
+margin-bottom: 0rem;
+margin: .3rem;
+text-align: center;
+position: relative;
+}
+
+.button:active {
+  background: rgb(223, 223, 32);
+}
+
+input[type="radio"] {
+  display: none;
+  cursor: pointer;
+}
