@@ -172,9 +172,12 @@ function enterKeyHandler(event) {
     if (count == 0) {
       storeSearchString();
     }
-    if (count == 1) {
+    if (count > 0) {
       storeResult(searchResults.firstChild.textContent);
     }
+  }
+  if (event.key == "ArrowDown" && searchResults.children[1]) {
+    searchResults.children[1].focus()
   }
 }
 
@@ -196,6 +199,9 @@ function renderSearchResults(event) {
       if (result.trim() != ''){
         searchResults.appendChild(li(result));
       }
+    }
+    if (searchResults.firstChild) {
+      searchResults.firstChild.setAttribute('targeted', '');
     }
   }
   searchResults.innerHTML = "";
@@ -230,8 +236,19 @@ function prevState(){
   states[currentState.prev].handler();
 }
 
+function onBlur(){
+  const first = searchResults.firstChild;
+  if (first) first.removeAttribute('targeted');
+}
+function onFocus(){
+  const first = searchResults.firstChild;
+  if (first) first.setAttribute('targeted', '');
+}
+
 searchBox.addEventListener("input", renderSearchResults);
 searchBox.addEventListener("keydown", enterKeyHandler);
+searchBox.addEventListener("blur", onBlur);
+searchBox.addEventListener("focus", onFocus);
 
 searchResults.addEventListener("keydown", checkKey);
 searchResults.addEventListener("click", storeSearchResult);
