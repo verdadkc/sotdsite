@@ -7,6 +7,12 @@ li {
   margin: 10px 0;
 }
 
+
+li[targeted] {
+  background-color:rgb(148, 226, 187);
+  outline-style: none;
+}
+
 li:focus {
   background-color:rgb(148, 226, 187);
   outline-style: none;
