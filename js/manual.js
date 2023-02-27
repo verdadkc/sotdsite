@@ -123,7 +123,7 @@ function clearSearchBox(){
 
 function renderSotd(text) {
   sotd.style.display = 'block';
-  sotdAppend(`${text.trim()} \n`);
+  sotdAppend(`${text.trim()}`);
   clearSearchBox();
 }
 
@@ -190,7 +190,7 @@ function focusChange(delta) {
 }
 
 function copySotd() {
-  window.navigator.clipboard.writeText(sotd.innerHTML);
+  window.navigator.clipboard.writeText(sotd.innerText);
 }
 
 function onBlur(){
