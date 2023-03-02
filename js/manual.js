@@ -17,8 +17,8 @@ function mod(n, m) { //Force the result to be in 0..n-1 even when n<0
 }
 
 function date(){
-  const today = new Date();
-  renderSotd(today.toDateString());
+  const today = (new Date()).toDateString();
+  renderDate("**"+today+"**" + "\n");
 }
 
 const states = {
@@ -124,6 +124,12 @@ function clearSearchBox(){
 function renderSotd(text) {
   sotd.style.display = 'block';
   sotdAppend(`${text.trim()}`);
+  clearSearchBox();
+}
+
+function renderDate(text) {
+  sotd.style.display = 'block';
+  sotdAppend(`${text}`);
   clearSearchBox();
 }
 
